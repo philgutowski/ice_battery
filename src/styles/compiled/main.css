@@ -1,0 +1,47 @@
+.animation {
+  perspective: 800px;
+  perspective-origin: 50% 100px;
+  margin: 40px 15%; }
+
+.cube {
+  position: relative;
+  width: 200px;
+  transform-style: preserve-3d; }
+
+.cube div {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border: solid black 1px; }
+
+.back {
+  transform: translateZ(-100px) rotateY(180deg); }
+
+.right {
+  transform: rotateY(-270deg) translateX(100px);
+  transform-origin: top right; }
+
+.left {
+  transform: rotateY(270deg) translateX(-100px);
+  transform-origin: center left; }
+
+.top {
+  transform: rotateX(-90deg) translateY(-100px);
+  transform-origin: top center; }
+
+.bottom {
+  transform: rotateX(90deg) translateY(100px);
+  transform-origin: bottom center; }
+
+.front {
+  transform: translateZ(100px); }
+
+@keyframes spin {
+  from {
+    transform: rotateY(0); }
+  to {
+    transform: rotateY(360deg); } }
+.cube {
+  animation: spin 20s infinite linear; }
+
+/*# sourceMappingURL=main.css.map */
