@@ -14,27 +14,3 @@ boxSizeForm = fridgeForm.elements["box-size-form"];
 boxDepthInput = boxSizeForm.elements["depth-of-box"];
 boxLengthInput = boxSizeForm.elements["length-of-box"];
 boxWidthInput = boxSizeForm.elements["width-of-box"];
-
-boxSizeForm.addEventListener("change", setCSSProperties, false);
-
-function setCSSProperties(e) {
-
-}
-
-var cssBoxPropetiesFrontAndBack = {
-	width: '',
-	height: '',
-	translateZ: ''
-}
-
-var cssBoxPropetiesRightAndLeft = {
-	width: '',
-	height: '',
-	translateZ: ''
-}
-
-var cssBoxPropetiesTopAndBottom = {
-	width: '',
-	height: '',
-	translateZ: ''
-}
