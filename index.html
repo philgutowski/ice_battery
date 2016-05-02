@@ -16,13 +16,13 @@
     <form id="fridge-form">
         <fieldset id="box-size-form">
             <legend>Box size calculations</legend>
-            <label for="depth-of-box">Depth of box</label>
+            <label for="depth-of-box">Depth of box (inches)</label>
             <input id="depth-of-box" type="number">
-            <label for="length-of-box">Length of box</label>
+            <label for="length-of-box">Length of box (inches)</label>
             <input id="length-of-box" type="number">
-            <label for="width-of-box">Width of box</label>
+            <label for="width-of-box">Width of box (inches)</label>
             <input id="width-of-box" type="number">
-<!--        <section id="box-container">
+            <!--        <section id="box-container">
                 <div id="box">
                     <figure id="front">1</figure>
                     <figure id="back">2</figure>
@@ -33,11 +33,29 @@
                 </div>
             </section>
 -->
-            <div class="box-dimensions"></div>
+            <div id="box-dimensions">
+                Please enter length, width and depth values
+            </div>
+        </fieldset>
+        <fieldset id="heat-loss-form" style="display: none;">
+            <legend>Heat Loss From Box</legend>
+            <p>
+                By determining the heat losses from any particular box, we can therefore determine its refrigeration requirements. This assumes a well constructed box with no air leaks, the use of closed cell foam insulation, and a top-opening lid.
+            </p>
+            <label for="fridge-select">Fridge</label>
+            <input id="fridge-select" type="radio" name="fridge-or-freezer" value="fridge">
+            <label for="freezer-select">Freezer</label>
+            <input id="freezer-select" type="radio" name="fridge-or-freezer" value="freezer">
+            <div id="thickness" style="display:none;">
+                <label for="insulation-thickness">Thickness of closed cell foam insulation</label>
+                <input id="insulation-thickness" type="range" min="1" max="6" value="3">
+                <output for="insulation-thickness" id="insulation-thickness-output">3 in.</output>
+                <output id="heat-loss-display">"Please select fridge or freezer."</output>
+            </div>
         </fieldset>
     </form>
 </body>
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-<!-- <script src="src/scripts/box_simulator.js"></script> -->
+<script src="src/scripts/box_simulator.js"></script>
 
 </html>
