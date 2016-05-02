@@ -1,3 +1,7 @@
+* {
+  display: block;
+}
+
 #box-container {
   width: 300px;
   height: 200px;
