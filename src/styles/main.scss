@@ -1,1 +1,25 @@
-@import 'cube';
+@import 'bourbon/bourbon';
+@import 'base/base';
+@import 'neat/neat';
+@import 'refills';
+
+.container {
+	@include outer-container;
+}
+
+input[type="range"] {
+	@include span-columns(7);
+	height: 3em;
+}
+
+.range-output {
+	@include span-columns(4);
+}
+
+label {
+	@include span-columns(12);
+}
+
+.cold-plate-specs-display {
+	@include span-columns(12);
+}
