@@ -1,1 +1,53 @@
-@import 'cube';
+@import 'bourbon/bourbon';
+@import 'base/base';
+@import 'neat/neat';
+@import 'refills';
+.container {
+    @include outer-container;
+}
+
+input[type="range"] {
+    @include span-columns(7);
+    height: 3em;
+}
+
+.range-output {
+    @include span-columns(4);
+    background-color: $secondary-background-color;
+    line-height: 3em;
+    border: 1px solid $base-border-color;
+    border-radius: $base-border-radius;
+    text-align: center;
+    box-shadow: $form-box-shadow;
+}
+
+label {
+    @include span-columns(12);
+}
+
+.cold-plate-container {
+	@include span-columns(12);
+}
+
+.specs-display {
+    @include span-columns(6);
+    padding: 1em;
+    border: 1px solid $base-border-color;
+    border-radius: $base-border-radius;
+    box-shadow: $form-box-shadow;
+    background-color: $secondary-background-color;
+    li {
+        margin: 1em 0;
+        padding: 1em;
+        background-color: $base-background-color;
+    }
+}
+
+#fridge-form {
+    @include span-columns(6);
+    padding: 1em;
+    border: 1px solid $base-border-color;
+    border-radius: $base-border-radius;
+    box-shadow: $form-box-shadow;
+    background-color: $secondary-background-color;
+}

@@ -7,55 +7,109 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="Ice Battery Calculations">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="src/styles/compiled/main.css">
 </head>
 
 <body>
     <h1>Marine Refrigeration Calculator for Cold Plates</h1>
-    <form id="fridge-form">
-        <fieldset id="box-size-form">
-            <legend>Box size calculations</legend>
-            <label for="depth-of-box">Depth of box (inches)</label>
-            <input id="depth-of-box" type="number">
-            <label for="length-of-box">Length of box (inches)</label>
-            <input id="length-of-box" type="number">
-            <label for="width-of-box">Width of box (inches)</label>
-            <input id="width-of-box" type="number">
-            <!--        <section id="box-container">
-                <div id="box">
-                    <figure id="front">1</figure>
-                    <figure id="back">2</figure>
-                    <figure id="right">3</figure>
-                    <figure id="left">4</figure>
-                    <figure id="top">5</figure>
-                    <figure id="bottom">6</figure>
-                </div>
-            </section>
--->
-            <div id="box-dimensions">
-                Please enter length, width and depth values
+    <div class="container">
+        <form id="fridge-form">
+            <div class="expander box-size-container">
+                <a href="javascript:void(0)" class="expander-trigger">Box size calculations</a>
+                <fieldset id="box-size-form" class="expander-content">
+                    <label for="depth-of-box">Depth of box (inches)</label>
+                    <input id="depth-of-box" type="number">
+                    <label for="length-of-box">Length of box (inches)</label>
+                    <input id="length-of-box" type="number">
+                    <label for="width-of-box">Width of box (inches)</label>
+                    <input id="width-of-box" type="number">
+                </fieldset>
             </div>
-        </fieldset>
-        <fieldset id="heat-loss-form" style="display: none;">
-            <legend>Heat Loss From Box</legend>
-            <p>
-                By determining the heat losses from any particular box, we can therefore determine its refrigeration requirements. This assumes a well constructed box with no air leaks, the use of closed cell foam insulation, and a top-opening lid.
-            </p>
-            <label for="fridge-select">Fridge</label>
-            <input id="fridge-select" type="radio" name="fridge-or-freezer" value="fridge">
-            <label for="freezer-select">Freezer</label>
-            <input id="freezer-select" type="radio" name="fridge-or-freezer" value="freezer">
-            <div id="thickness" style="display:none;">
-                <label for="insulation-thickness">Thickness of closed cell foam insulation</label>
-                <input id="insulation-thickness" type="range" min="1" max="6" value="3">
-                <output for="insulation-thickness" id="insulation-thickness-output">3 in.</output>
-                <output id="heat-loss-display">"Please select fridge or freezer."</output>
+            <div class="expander heat-loss-container">
+                <a href="javascript:void(0)" class="expander-trigger expander-hidden">Heat Loss From Box</a>
+                <fieldset id="heat-loss-form" class="expander-content">
+                    <p>
+                        By determining the heat losses from any particular box, we can therefore determine its refrigeration requirements. This assumes a well constructed box with no air leaks, the use of closed cell foam insulation, and a top-opening lid.
+                    </p>
+                    <label class="label-switch" for="fridge-select">Fridge
+                        <input id="fridge-select" type="checkbox" name="fridge-or-freezer" value="fridge">
+                        <div class="checkbox"></div>
+                    </label>
+                    <label class="label-switch" for="freezer-select">Freezer
+                        <input id="freezer-select" type="checkbox" name="fridge-or-freezer" value="freezer">
+                        <div class="checkbox"></div>
+                    </label>
+                    <div id="thickness">
+                        <label for="insulation-thickness">Thickness of closed cell foam insulation</label>
+                        <input id="insulation-thickness" type="range" min="1" max="6" value="3">
+                        <output for="insulation-thickness" class="range-output" id="insulation-thickness-output">3 in.</output>
+                    </div>
+                </fieldset>
             </div>
-        </fieldset>
-    </form>
+            <div class="expander cold-plate-container">
+                <a href="javascript:void(0)" class="expander-trigger expander-hidden">Cold Plate Size</a>
+                <fieldset id="cold-plate-size" class="expander-content">
+                    <label for="holdover-time">
+                        Desired length of time between pull downs. (hours)
+                    </label>
+                    <input type="range" id="holdover-time" min="0" max="72" step="4" value="24">
+                    <output class="holdover-time-output range-output">24 hours</output>
+                    <label for="pull-down-time">
+                        Desired length of time required for each pull down. (hours)
+                    </label>
+                    <input type="range" id="pull-down-time" min=".25" max="4" value="2" step=".25">
+                    <output class="pull-down-time-output range-output">2</output>
+                </fieldset>
+            </div>
+        </form>
+        <div class="specs-display">
+            <h2>Insulated Box and Cold Plate Specifications</h2>
+            <ul>
+                <li>
+                    <p>Box Dimensions: <span id="box-dimensions"></span></p>
+                    <p>Box Surface Area: <span id="surface-area"></span></p>
+                    <p>Box application: <span id="box-application"></span></p>
+                </li>
+                <li>
+                    Amount of heat leaked from box per hour: <span id="heat-loss-display"></span>
+                </li>
+                <li>
+                    Desired length of time between pull downs: <span class="holdover-time-output"></span>
+                </li>
+                <li>
+                    Minimum plate Btu capacity: <span id="minimum-plate-btu-capacity"></span>
+                </li>
+                <li>
+                    Desired run time of refirgeration unit for pulling down (freezing) the plate: <span class="pull-down-time-output"></span>
+                </li>
+                <li>
+                    Required compressor capacity, or rate of pull down: <span id="rate-of-pull-down-output">
+                    </span>
+                </li>
+                <li>
+                    Minimum volume of eutectic solution to provide the desired holdover capacticy: <span id="volume-of-solution-display"></span>
+                </li>
+                <li>
+                    Required surface area of tubing: <span id="tubing-surface-area-output"></span>
+                </li>
+                <li>
+                    Weight of refrigerant to circulate per hour: <span id="weight-of-refrigerant-per-hour-output"></span>
+                </li>
+                <li>
+                    Required rate of refrigerant flow through tubing: <span id="rate-of-flow-output"></span>
+                </li>
+                <li>
+                    Reccomended tubing diameter based on flow rate: <span id="tubing-diameter-output"></span>
+                </li>
+                <li>
+                    Required length of tubing based on diameter: <span id="tubing-length-output"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
 </body>
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="src/scripts/box_simulator.js"></script>
+<script src="src/scripts/main.js"></script>
+<script src="src/scripts/refills.js"></script>
 
 </html>
