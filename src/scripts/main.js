@@ -41,6 +41,8 @@ window.onload = function() {
     var tubingSurfaceAreaOutput = document.getElementById("tubing-surface-area-output");
     var weightOfRefrigerantPerHourOutput = document.getElementById("weight-of-refrigerant-per-hour-output");
     var rateOfFlowOutput = document.getElementById("rate-of-flow-output");
+    var tubingDiameterOutput = document.getElementById("tubing-diameter-output");
+    var tubingLengthOutput = document.getElementById("tubing-length-output");
 
     // event listeners
     boxSizeForm.addEventListener("change", setBoxDimensions, false);
@@ -95,8 +97,6 @@ window.onload = function() {
 
         let plateBtuCapactiy = determineHeatLoss() * holdOverTime.value;
         if (plateBtuCapactiy) { minPlateBtuCapacityOutput.innerHTML = plateBtuCapactiy + " Btus" };
-        // Calculate needed volume of eutectic solution.  Then allow the user to specify
-        // two dimensions of their cold plate and calculate the third.
         let volumeOfSolution = plateBtuCapactiy / 1000;
         if (volumeOfSolution) {
             volumeOfSolutionDisplay.innerHTML = volumeOfSolution + " gallons"
@@ -106,9 +106,9 @@ window.onload = function() {
 
     function rateOfPullDown(btuCapacity) {
         // capactiy / time
-        let rateOfPullDown = btuCapacity / pullDownTime.value;
+        let rateOfPullDown = Math.round(btuCapacity / pullDownTime.value);
         if (rateOfPullDown) {
-            rateOfPullDownOutput.innerHTML = Math.round(rateOfPullDown) + " Btus";
+            rateOfPullDownOutput.innerHTML = rateOfPullDown + " Btus";
             tubingSurfaceArea(rateOfPullDown);
             weightOfRefrigerantPerHour(rateOfPullDown);
         }
@@ -120,24 +120,70 @@ window.onload = function() {
         let fridgeDifferential = 26;
         let freezerDifferential = 20;
         if (fridgeSelect.checked == true) {
-            var tubeSurfaceArea = rateOfPullDown / 18 * fridgeDifferential;
-            tubingSurfaceAreaOutput.innerHTML = Math.round(tubeSurfaceArea) + " sq. in."
+            var tubeSurfaceArea = Math.round(rateOfPullDown / 18 * fridgeDifferential);
         } else if (freezerSelect.checked == true) {
-            var tubeSurfaceArea = rateOfPullDown / 18 * freezerDifferential;
-            tubingSurfaceAreaOutput.innerHTML = Math.round(tubeSurfaceArea) + " sq. in."
+            var tubeSurfaceArea = Math.round(rateOfPullDown / 18 * freezerDifferential);
         }
+        if (tubeSurfaceArea) { tubingSurfaceAreaOutput.innerHTML = tubeSurfaceArea + " sq. in." };
+
+        return tubeSurfaceArea;
     }
 
     function weightOfRefrigerantPerHour(rateOfPullDown) {
         // assume a net refrigerating effect of 45 Btus per pound
-        let weightToCirculate = rateOfPullDown / 45;
-        weightOfRefrigerantPerHourOutput.innerHTML = Math.round(weightToCirculate) + " lbs./hr."
+        let weightToCirculate = Math.round(rateOfPullDown / 45);
+        weightOfRefrigerantPerHourOutput.innerHTML = weightToCirculate + " lbs./hr."
         rateOfFlow(weightToCirculate);
     }
 
     function rateOfFlow(weightToCirculate) {
         // assume a vapor volume of 1.6 cu.ft./lb. in a fridge and 2.5 cu.ft./lb. in a freezer
+        if (fridgeSelect.checked = true) {
+            var vaporVolume = 1.6;
+        } else if (freezerSelect.checked = true) {
+            var vaporVolume = 2.5;
+        }
+        let flowRate = Math.round((weightToCirculate * vaporVolume * 12 * 12 * 12) / 60);
+        if (flowRate) { rateOfFlowOutput.innerHTML = flowRate + " cu.in./min." }
+        determineTubingDiameter(flowRate);
     }
+
+    function determineTubingDiameter(flowRate) {
+        if (flowRate > 5184) {
+            var requireParalellTubes = true;
+            var tubingDiameter = "This is a very high flow rate and will require paralell tubes";
+        } else if (3168 <= flowRate <= 5184) {
+            var tubingDiameter = "5/8 in."
+            var requireParalellTubes = false;
+        } else if (1980 <= flowRate <= 3168) {
+            var tubingDiameter = "1/2 in."
+            var requireParalellTubes = false;
+        } else if (flowRate < 1980) {
+            var tubingDiameter = "3/8 in."
+            var requireParalellTubes = false;
+        }
+
+        tubingDiameterOutput.innerHTML = tubingDiameter;
+        determineTubingLength(requireParalellTubes, tubingDiameter);
+    }
+
+    function determineTubingLength(requireParalellTubes, tubingDiameter) {
+
+        // LEFT OFF HERE
+        // This might be a case where we need to set the various output values as props on objects.
+        // We need to get the value that is returned by tubingSurfaceArea(), but we don't have access to
+        // rateOfPullDown at this point
+
+        console.log(tubingSurfaceArea());
+        // if (requireParalellTubes == false) {
+        //     var tubingLengthInFeet = ( * 12) / (3.14 * tubingDiameter) + " ft.";
+        // } else {
+        //     var tubingLengthInFeet = "This requires seperate calculations for paralell tubing."
+        // }
+
+        // tubingLengthOutput.innerHTML = tubingLengthInFeet;
+    }
+
 
 
     // would be nice to replace these static figures with real heat loss calcs based on R value of insulation
