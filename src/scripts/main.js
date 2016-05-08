@@ -80,33 +80,6 @@ window.onload = function() {
     // event listeners
     fridgeForm.addEventListener("change", setBoxDimensions, false);
 
-    function updateOutputFields() {
-
-        //step 3
-        // determineColdPlateVolume();
-        // determineRateOfPullDown();
-        // determineTubingSurfaceArea();
-        // determineRateOfFlow();
-        // determineTubingDiameter();
-        // determineTubingLength();
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if (box.tubingLengthInFeetDisplay) {
-            tubingLengthOutput.innerHTML = box.tubingLengthInFeetDisplay;
-        }
-    }
-
     function setBoxDimensions() {
         if (boxLengthInput.value && boxWidthInput.value && boxDepthInput.value) {
             box.surfaceAreaSqFt = ((2 * (boxLengthInput.value * boxWidthInput.value) + 2 * (boxLengthInput.value * boxDepthInput.value) + 2 * (boxDepthInput.value * boxWidthInput.value)) / 144).toPrecision(3);
