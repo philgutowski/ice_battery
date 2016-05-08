@@ -274,11 +274,23 @@ html {
 .container {
   max-width: 1200px;
   margin-left: auto;
-  margin-right: auto; }
+  margin-right: auto;
+  min-width: 700px; }
   .container::after {
     clear: both;
     content: "";
     display: block; }
+
+.title {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 100%;
+  text-align: center;
+  line-height: 2em;
+  font-size: 1.75em; }
+  .title:last-child {
+    margin-right: 0; }
 
 input[type="range"] {
   float: left;
@@ -334,7 +346,10 @@ label {
   .specs-display li {
     margin: 1em 0;
     padding: 1em;
-    background-color: #fff; }
+    background-color: #fff;
+    font-style: italic; }
+  .specs-display .incomplete {
+    color: red; }
 
 #fridge-form {
   float: left;

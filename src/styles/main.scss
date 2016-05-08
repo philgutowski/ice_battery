@@ -4,6 +4,14 @@
 @import 'refills';
 .container {
     @include outer-container;
+    min-width: 700px;
+}
+
+.title {
+	@include span-columns(12);
+	text-align: center;
+	line-height: 2em;
+	font-size: 1.75em;
 }
 
 input[type="range"] {
@@ -26,7 +34,7 @@ label {
 }
 
 .cold-plate-container {
-	@include span-columns(12);
+    @include span-columns(12);
 }
 
 .specs-display {
@@ -40,6 +48,11 @@ label {
         margin: 1em 0;
         padding: 1em;
         background-color: $base-background-color;
+        font-style: italic;
+    }
+ 
+    .incomplete {
+        color: red;
     }
 }
 

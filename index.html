@@ -11,8 +11,8 @@
 </head>
 
 <body>
-    <h1>Marine Refrigeration Calculator for Cold Plates</h1>
     <div class="container">
+        <h1 class="title">Marine Refrigeration Calculator for Cold Plates</h1>
         <form id="fridge-form">
             <div class="expander box-size-container">
                 <a href="javascript:void(0)" class="expander-trigger">Box size calculations</a>
@@ -66,43 +66,43 @@
             <h2>Insulated Box and Cold Plate Specifications</h2>
             <ul>
                 <li>
-                    <p>Box Dimensions: <span id="box-dimensions"></span></p>
-                    <p>Box Surface Area: <span id="surface-area"></span></p>
-                    <p>Box application: <span id="box-application"></span></p>
+                    <p>Box Dimensions: <p id="box-dimensions-output"></p></p>
+                    <p>Box Surface Area: <p id="surface-area-output"></p></p>
+                    <p>Box application: <p id="box-application-output"></p></p>
                 </li>
                 <li>
-                    Amount of heat leaked from box per hour: <span id="heat-loss-display"></span>
+                    Rate of heat leak: <p id="heat-loss-output"></p>
                 </li>
                 <li>
-                    Desired length of time between pull downs: <span class="holdover-time-output"></span>
+                    Desired length of time between pull downs: <p class="holdover-time-output"></p>
                 </li>
                 <li>
-                    Minimum plate Btu capacity: <span id="minimum-plate-btu-capacity"></span>
+                    Minimum plate Btu capacity: <p id="minimum-plate-btu-capacity"></p>
                 </li>
                 <li>
-                    Desired run time of refirgeration unit for pulling down (freezing) the plate: <span class="pull-down-time-output"></span>
+                    Desired run time of refirgeration unit for pulling down (freezing) the plate: <p class="pull-down-time-output"></p>
                 </li>
                 <li>
-                    Required compressor capacity, or rate of pull down: <span id="rate-of-pull-down-output">
-                    </span>
+                    Required rate of pull down (compressor capacity): <p id="rate-of-pull-down-output">
+                    </p>
                 </li>
                 <li>
-                    Minimum volume of eutectic solution to provide the desired holdover capacticy: <span id="volume-of-solution-display"></span>
+                    Minimum volume of eutectic solution to provide the desired holdover capacticy: <p id="volume-of-solution-output"></p>
                 </li>
                 <li>
-                    Required surface area of tubing: <span id="tubing-surface-area-output"></span>
+                    Required surface area of tubing: <p id="tubing-surface-area-output"></p>
                 </li>
                 <li>
-                    Weight of refrigerant to circulate per hour: <span id="weight-of-refrigerant-per-hour-output"></span>
+                    Weight of refrigerant to circulate per hour: <p id="weight-of-refrigerant-per-hour-output"></p>
                 </li>
                 <li>
-                    Required rate of refrigerant flow through tubing: <span id="rate-of-flow-output"></span>
+                    Required rate of refrigerant flow through tubing: <p id="rate-of-flow-output"></p>
                 </li>
                 <li>
-                    Reccomended tubing diameter based on flow rate: <span id="tubing-diameter-output"></span>
+                    Reccomended tubing diameter based on flow rate: <p id="tubing-diameter-output"></p>
                 </li>
                 <li>
-                    Required length of tubing based on diameter: <span id="tubing-length-output"></span>
+                    Required length of tubing based on diameter: <p id="tubing-length-output"></p>
                 </li>
             </ul>
         </div>
