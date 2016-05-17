@@ -1,6 +1,13 @@
 # ice_battery
 A tool for calculating all the properties for custom cold plates to be installed with a marine refrigeration system.
 
+### To Do
+- [ ] No need for deactivated <a/> tags to trigger the expander behavior; since the behavior is mapped to a jQuery class selector, these could be <span/> tags, or, an <a/> tag with no href attribute. Either is preferable to the 'href="javascript:void(0)"' solution.
+- [ ] Event handling: Right now, there is only one event listener controlling all of the behavior, due to the chaining of functionality so that the outcomes all cascade from one another.  This is viable, but is there a better way?
+- [ ] Custom object: The box{} object serves its purpose as a simple property bag, but I could give it a predefined structure and defined the cascading chain of functions as methods on the Box object.  This will put me in a stronger position to enrich the tool by, say, making it possible for the user to create multiple configurations and compare them to one another.
+- [ ] Form validation: Currently, the validation behavior is scattered among the cascading functions, which is fine, since these functions are closely associated with the data inputs to be validated. But, some of them don't seem to work correctly -- for instance, the validation in function determineHeatLoss() when neither Fridge nor Freezer is selected doesn't fire because you return from the function before writing out the message to the DOM. The null input validation on the box dimensions works well, but may need some additional logic controls to prevent the user from entering values less than 1 into any of the dimension fields, probably defined against events on the fields themselves.
+- [ ] DOM modification: Given that I want the Cold Plate Size panel to be visible contingent on whether required upstream data has been provided, rather than manipulating the expander, I could add logic that would add it to the DOM when the data is supplied, and remove it if the required data is deleted.  Not yet sure what is the best user experience here.  I want the user to be able to 'look ahead' and see what other information they are expected to provide.
+
 ## Steps
 
 ### Calculate Heat Leak of Insulated Box
