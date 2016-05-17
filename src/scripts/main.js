@@ -1,7 +1,6 @@
 window.onload = function() {
 
-    // Objects that will store data for future calculations
-    var box = {};
+
 
     // would be nice to replace these static figures with real heat loss calcs based on R value of insulation
     var heatLossTable = {
@@ -25,7 +24,7 @@ window.onload = function() {
 
     // DOM Element Selectors
     // I considered looping over the elements and auto generating the js variables to correspond
-    // to these elements, but I think the code is more easily understood if I manual select each element.
+    // to these elements, but I think the code is more easily understood if I manually select each element.
 
     // main form element
     var fridgeForm = document.forms["fridge-form"];
@@ -80,15 +79,56 @@ window.onload = function() {
     // event listeners
     fridgeForm.addEventListener("change", setBoxDimensions, false);
 
+    // Objects that will store data for future calculations
+    var box = {
+        surfaceAreaSqFt: function() {
+            return ((2 * (boxLengthInput.value * boxWidthInput.value) + 2 * (boxLengthInput.value * boxDepthInput.value) + 2 * (boxDepthInput.value * boxWidthInput.value)) / 144).toPrecision(3);
+        },
+        boxDimensions: function() {
+            return boxLengthInput.value + " in.  X  " + boxWidthInput.value + " in.  X  " + boxDepthInput.value + " in. ";
+        },
+        insulationThickness: insulationThickness.value,
+        heatLoss: '',
+        boxApplication: '',
+        //// LEFT OF HERE, THIS IS RETURNING NAN
+        heatLossPerHour: function() { return ((this.heatLoss / 24) * this.surfaceAreaSqFt).toPrecision(3) + " Btus/hr.";
+        },
+        pullDownTime: pullDownTime.value,
+        holdOverTime: holdOverTime.value,
+        plateBtuCapactiy: function() {
+            return this.heatLoss * this.holdOverTime;
+        },
+        volumeOfSolution: function() {
+            return this.plateBtuCapactiy() / 1000;
+        },
+        rateOfPullDown: function() {
+            return Math.round(this.plateBtuCapactiy() / this.pullDownTime);
+        },
+        fridgeDifferential: 26,
+        freezerDifferential: 20,
+        tubeSurfaceArea: function() {
+            if (this.boxApplication = "fridge") {
+                var applicationDifferential = this.fridgeDifferential;
+            } else if (this.boxApplication = "freezer") {
+                var applicationDifferential = this.freezerDifferential;
+            }
+            return Math.round(box.rateOfPullDown / (18 * applicationDifferential));
+        },
+        weightToCirculate: '',
+        vaporVolume: '',
+        flowRate: '',
+        requireParalellTubes: false,
+        tubingDiameterDisplay: '',
+        tubingDiameter: '',
+        tubingLengthInFeet: '',
+        tubingLengthInFeetDisplay: ''
+    };
+
     function setBoxDimensions() {
         if (boxLengthInput.value && boxWidthInput.value && boxDepthInput.value) {
-            box.surfaceAreaSqFt = ((2 * (boxLengthInput.value * boxWidthInput.value) + 2 * (boxLengthInput.value * boxDepthInput.value) + 2 * (boxDepthInput.value * boxWidthInput.value)) / 144).toPrecision(3);
-            box.boxDimensions = boxLengthInput.value + " in.  X  " + boxWidthInput.value + " in.  X  " + boxDepthInput.value + " in. ";
-        }
-
-        if (box.boxDimensions && box.surfaceAreaSqFt) {
-            boxDimensionsOutput.innerHTML = box.boxDimensions;
-            surfaceAreaOutput.innerHTML = box.surfaceAreaSqFt + " sq. ft.";
+            box.surfaceAreaSqFt();
+            boxDimensionsOutput.innerHTML = box.boxDimensions();
+            surfaceAreaOutput.innerHTML = box.surfaceAreaSqFt() + " sq. ft.";
             boxDimensionsOutput.classList.remove("incomplete");
             //dynamically display form section
             heatLossExpander.classList.remove("expander-hidden");
@@ -97,10 +137,10 @@ window.onload = function() {
             boxDimensionsOutput.innerHTML = "please enter values for all dimensions"
             boxDimensionsOutput.classList.add("incomplete");
         }
+
     }
 
     function determineHeatLoss() {
-        box.insulationThickness = insulationThickness.value;
         insulationThicknessOutput.innerHTML = box.insulationThickness + " in."
         if (fridgeSelect.checked == true) {
             freezerSelect.checked = false;
@@ -117,20 +157,13 @@ window.onload = function() {
             coldPlateExpander.classList.add("expander-hidden");
             return;
         }
-        // this won't calculate a value until previous values have been filled out
-        box.heatLossPerHour = ((box.heatLoss / 24) * box.surfaceAreaSqFt).toPrecision(3) + " Btus/hr.";
         boxApplicationOutput.innerHTML = box.boxApplication;
-        if (box.heatLossPerHour) { heatLossOutput.innerHTML = box.heatLossPerHour; }
+        if (box.heatLossPerHour()) { heatLossOutput.innerHTML = box.heatLossPerHour(); }
         determineColdPlateVolume();
         coldPlateExpander.classList.remove("expander-hidden");
     }
 
     function determineColdPlateVolume() {
-        box.pullDownTime = pullDownTime.value;
-        box.holdOverTime = holdOverTime.value;
-        box.plateBtuCapactiy = box.heatLoss * box.holdOverTime;
-        box.volumeOfSolution = box.plateBtuCapactiy / 1000;
-
         if (box.pullDownTime && box.holdOverTime) {
             for (i = 0; i < pullDownTimeOutput.length; i++) {
                 pullDownTimeOutput[i].innerHTML = box.pullDownTime + " hours";
@@ -140,31 +173,21 @@ window.onload = function() {
             }
         }
 
-        if (box.plateBtuCapactiy) { minPlateBtuCapacityOutput.innerHTML = box.plateBtuCapactiy + " Btus"; }
-        if (box.volumeOfSolution) { volumeOfSolutionOutput.innerHTML = box.volumeOfSolution + " gallons"; }
-        if (box.plateBtuCapactiy && box.pullDownTime) { determineRateOfPullDown(); }
+        if (box.plateBtuCapactiy()) { minPlateBtuCapacityOutput.innerHTML = box.plateBtuCapactiy() + " Btus"; }
+        if (box.volumeOfSolution()) { volumeOfSolutionOutput.innerHTML = box.volumeOfSolution() + " gallons"; }
+        if (box.plateBtuCapactiy() && box.pullDownTime) { determineRateOfPullDown(); }
     }
 
     function determineRateOfPullDown() {
-        // capactiy / time
-        box.rateOfPullDown = Math.round(box.plateBtuCapactiy / box.pullDownTime);
         if (box.rateOfPullDown) {
-            rateOfPullDownOutput.innerHTML = box.rateOfPullDown + " Btus/hr.";
+            rateOfPullDownOutput.innerHTML = box.rateOfPullDown() + " Btus/hr.";
             determineTubingSurfaceArea();
         }
     }
 
     function determineTubingSurfaceArea() {
-        // Assume a K factor of 18 and a differential of 26 deg for fridge and 20 def for freezer
-        box.fridgeDifferential = 26;
-        box.freezerDifferential = 20;
-        if (box.boxApplication == "Fridge") {
-            box.tubeSurfaceArea = Math.round(box.rateOfPullDown / (18 * box.fridgeDifferential));
-        } else if (box.boxApplication == "Freezer") {
-            box.tubeSurfaceArea = Math.round(box.rateOfPullDown / (18 * box.freezerDifferential));
-        }
-        if (box.tubeSurfaceArea) {
-            tubingSurfaceAreaOutput.innerHTML = box.tubeSurfaceArea + " sq. in.";
+        if (box.tubeSurfaceArea()) {
+            tubingSurfaceAreaOutput.innerHTML = box.tubeSurfaceArea() + " sq. in.";
             determineWeightOfRefrigerantPerHour();
         };
     }
